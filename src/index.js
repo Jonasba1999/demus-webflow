@@ -235,7 +235,7 @@ const closedFundsListAnimation = function () {
 	const prevEase = "power2.in";
 	const currEase = "power2.out";
 	const animationInterval = 32;
-	const animationDuration = 1.5;
+	const animationDuration = 1;
 
 	// Setting height of the animation track, accordingly to how many funds there are
 	if (window.innerWidth > 767) {
@@ -292,7 +292,7 @@ const closedFundsListAnimation = function () {
 			let zIndex = index * -1;
 			fund.style.zIndex = zIndex;
 			if (index !== 0) {
-				gsap.set([currentTitleSplit.words, currentInfo, currentNumber, currentButton], { y: "100%" });
+				gsap.set([currentTitleSplit.words, currentInfo, currentNumber, currentButton, currentImage], { y: "100%" });
 			}
 
 			const tlDown = gsap.timeline({ paused: true });
@@ -328,75 +328,52 @@ const closedFundsListAnimation = function () {
 				const prevNumber = funds[index - 1].querySelector(".funds-list_current");
 				const prevButton = funds[index - 1].querySelector(".button");
 
-				tlDown.set(currentImage, {
-					x: "0%",
-					scale: 1,
-				});
+				// Scroll down animation
 				tlDown
 					.to(prevImage, {
-						scale: 1.1,
-						ease: prevEase,
-						duration: 0.5,
+						y: "-100%",
+						ease: "power2.inOut",
+						duration: 1,
 					})
 					.to(
-						[prevTitleWords, prevInfo, prevNumber, prevButton],
+						currentImage,
 						{
-							y: "100%",
-							ease: prevEase,
-							duration: 0.5,
+							y: "0%",
+							ease: "power2.inOut",
+							duration: 1,
 						},
 						"<"
 					)
 					.to(
-						prevImage,
+						[prevTitleWords, prevInfo, prevNumber, prevButton],
 						{
-							x: "-130%",
-							ease: prevEase,
-							duration: 0.5,
+							y: "-100%",
+							ease: "power2.inOut",
+							duration: 0.6,
 						},
-						"prevImageTween"
-					);
-
-				// Animate IN CURRENT
-				// Changing z-index so current is at the top after prev is animated out
-				tlDown.set(fund, { zIndex: zIndex * -1 });
-
-				tlDown
+						"<"
+					)
 					.to(
 						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
 						{
 							y: "0%",
-							ease: currEase,
-							duration: 1,
+							ease: "power2.inOut",
+							duration: 0.6,
 						},
-						"prevImageTween+=0.1"
-					)
-					.from(
-						currentImage,
-						{
-							scale: 1.2,
-							ease: currEase,
-							duration: 1.6,
-						},
-						"prevImageTween"
+						0.4
 					);
+
+				tlDown.set(fund, { zIndex: zIndex * -1 });
 
 				// (SCROLLING UP) Animate out current
 				tlUp
 					.set(prevImage, {
-						x: "0%",
-						scale: 1.2,
+						y: "100%",
 					})
-					.to(currentImage, {
-						scale: 1.1,
-						ease: prevEase,
-						duration: 0.5,
-					})
-
 					.to(
 						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
 						{
-							y: "100%",
+							y: "-100%",
 							ease: prevEase,
 							duration: 0.5,
 						},
@@ -405,7 +382,7 @@ const closedFundsListAnimation = function () {
 					.to(
 						currentImage,
 						{
-							x: "-130%",
+							y: "-100%",
 							ease: prevEase,
 							duration: 0.5,
 						},
@@ -420,16 +397,16 @@ const closedFundsListAnimation = function () {
 					{
 						y: "0%",
 						ease: currEase,
-						duration: 1,
+						duration: 0.5,
 					},
 					"currentImageTween+=0.1"
 				);
 				tlUp.to(
 					prevImage,
 					{
-						scale: 1,
+						y: "0%",
 						ease: currEase,
-						duration: 1.6,
+						duration: 0.5,
 					},
 					"currentImageTween"
 				);
