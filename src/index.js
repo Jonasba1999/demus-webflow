@@ -367,49 +367,40 @@ const closedFundsListAnimation = function () {
 
 				// (SCROLLING UP) Animate out current
 				tlUp
-					.set(prevImage, {
+					.to(currentImage, {
 						y: "100%",
+						ease: "power2.inOut",
+						duration: 1,
 					})
 					.to(
-						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
+						prevImage,
 						{
-							y: "-100%",
-							ease: prevEase,
-							duration: 0.5,
+							y: "0%",
+							ease: "power2.inOut",
+							duration: 1,
 						},
 						"<"
 					)
 					.to(
-						currentImage,
+						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
 						{
-							y: "-100%",
-							ease: prevEase,
-							duration: 0.5,
+							y: "100%",
+							ease: "power2.inOut",
+							duration: 0.6,
 						},
-						"currentImageTween"
+						"<"
+					)
+					.to(
+						[prevTitleWords, prevInfo, prevNumber, prevButton],
+						{
+							y: "0%",
+							ease: "power2.inOut",
+							duration: 0.6,
+						},
+						0.4
 					);
 
-				//(SCROLLING UP) Animate in previous
-				tlUp.set(fund, { zIndex: zIndex });
-
-				tlUp.to(
-					[prevTitleWords, prevInfo, prevNumber, prevButton],
-					{
-						y: "0%",
-						ease: currEase,
-						duration: 0.5,
-					},
-					"currentImageTween+=0.1"
-				);
-				tlUp.to(
-					prevImage,
-					{
-						y: "0%",
-						ease: currEase,
-						duration: 0.5,
-					},
-					"currentImageTween"
-				);
+				tlDown.set(fund, { zIndex: zIndex * -1 });
 			}
 		}
 	});
