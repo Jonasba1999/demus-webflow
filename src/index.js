@@ -400,7 +400,7 @@ const closedFundsListAnimation = function () {
 						0.4
 					);
 
-				tlDown.set(fund, { zIndex: zIndex * -1 });
+				tlUp.set(fund, { zIndex: zIndex });
 			}
 		}
 	});
