@@ -10,34 +10,38 @@ import "swiper/css";
 // Two custom events for smoothScroll() function
 const eventDisableScroll = new Event("disable-scroll");
 const eventEnableScroll = new Event("enable-scroll");
+let lenis;
 
-const lenis = new Lenis({
-	lerp: 0.1,
-	touchMultiplier: 2,
-});
+const smoothScroll = function () {
+	if (Webflow.env("editor") === undefined) {
+		lenis = new Lenis({
+			lerp: 0.1,
+			touchMultiplier: 1.5,
+			easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+		});
 
-lenis.on("scroll", ScrollTrigger.update);
+		lenis.on("scroll", ScrollTrigger.update);
 
-gsap.ticker.add((time) => {
-	lenis.raf(time * 1000);
-});
+		gsap.ticker.add((time) => {
+			lenis.raf(time * 1000);
+		});
 
-gsap.ticker.lagSmoothing(0);
+		gsap.ticker.lagSmoothing(0);
 
-const mainWrap = document.querySelector(".container-large");
+		// Function to disable scroll and compensate for scrollbar width
+		function disableScroll() {
+			lenis.stop();
+		}
 
-// Function to disable scroll and compensate for scrollbar width
-function disableScroll() {
-	lenis.stop();
-}
-
-// Function to enable scroll and remove compensation
-function enableScroll() {
-	lenis.start();
-}
-// Event listeners for custom events triggered when menu opens/closes
-document.addEventListener("disable-scroll", disableScroll);
-document.addEventListener("enable-scroll", enableScroll);
+		// Function to enable scroll and remove compensation
+		function enableScroll() {
+			lenis.start();
+		}
+		// Event listeners for custom events triggered when menu opens/closes
+		document.addEventListener("disable-scroll", disableScroll);
+		document.addEventListener("enable-scroll", enableScroll);
+	}
+};
 
 const menuAnimation = function () {
 	const menuTrigger = document.querySelectorAll(".header_hamburger, .nav_hamburger, .header_hamburger-text");
@@ -1338,6 +1342,7 @@ const faqNavLinks = function () {
 
 const initFunctions = function () {
 	gsap.registerPlugin(ScrollTrigger);
+	smoothScroll();
 	menuAnimation();
 	rotatingTextAnimation();
 	closedFundsListAnimation();
