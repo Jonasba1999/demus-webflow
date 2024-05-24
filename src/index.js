@@ -10,35 +10,44 @@ import "swiper/css";
 // Two custom events for smoothScroll() function
 const eventDisableScroll = new Event("disable-scroll");
 const eventEnableScroll = new Event("enable-scroll");
-let lenis;
 
-const smoothScroll = function () {
-	lenis = new Lenis({
-		lerp: 0.1,
-		touchMultiplier: 1.5,
-		easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-	});
-
-	lenis.on("scroll", ScrollTrigger.update);
-
-	gsap.ticker.add((time) => {
-		lenis.raf(time * 1000);
-	});
-
-	gsap.ticker.lagSmoothing(0);
-
-	// Function to disable scroll and compensate for scrollbar width
-	function disableScroll() {
+// Function to disable scroll
+function disableScroll() {
+	if (lenis) {
 		lenis.stop();
+	} else {
 	}
+}
 
-	// Function to enable scroll and remove compensation
-	function enableScroll() {
-		lenis.start();
+// Function to enable scroll
+function enableScroll() {
+	lenis.start();
+}
+
+// Event listeners for custom events triggered when menu opens/closes
+document.addEventListener("disable-scroll", disableScroll);
+document.addEventListener("enable-scroll", enableScroll);
+
+// Lenis smooth scroll function
+let lenis;
+const smoothScroll = function () {
+	console.log(Webflow.env("editor") === undefined);
+	if (true) {
+		console.log("Running smooth scroll");
+		lenis = new Lenis({
+			lerp: 0.1,
+			touchMultiplier: 1.5,
+			easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+		});
+
+		lenis.on("scroll", ScrollTrigger.update);
+
+		gsap.ticker.add((time) => {
+			lenis.raf(time * 1000);
+		});
+
+		gsap.ticker.lagSmoothing(0);
 	}
-	// Event listeners for custom events triggered when menu opens/closes
-	document.addEventListener("disable-scroll", disableScroll);
-	document.addEventListener("enable-scroll", enableScroll);
 };
 
 const menuAnimation = function () {
