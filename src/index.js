@@ -1347,7 +1347,7 @@ const faqNavLinks = function () {
 
 const initFunctions = function () {
 	gsap.registerPlugin(ScrollTrigger);
-	smoothScroll();
+	// smoothScroll();
 	menuAnimation();
 	rotatingTextAnimation();
 	closedFundsListAnimation();
