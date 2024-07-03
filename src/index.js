@@ -31,8 +31,6 @@ document.addEventListener("enable-scroll", enableScroll);
 // Lenis smooth scroll function
 let lenis;
 const smoothScroll = function () {
-	console.log("response from smoothscroll");
-	console.log(Webflow.env("editor"));
 	if (Webflow.env("editor") === undefined) {
 		lenis = new Lenis({
 			lerp: 0.1,
