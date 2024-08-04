@@ -11,14 +11,11 @@ import "swiper/css";
 const eventDisableScroll = new Event("disable-scroll");
 const eventEnableScroll = new Event("enable-scroll");
 
-let currentScrll;
 // Function to disable scroll
 function disableScroll() {
-	const preventSroll = function (event) {
-		event.preventDefault();
-	};
 	if (lenis) {
-		window.addEventListener("wheel", preventScroll, { passive: false });
+		lenis.stop();
+	} else {
 	}
 }
 
@@ -37,11 +34,8 @@ const smoothScroll = function () {
 	if (Webflow.env("editor") === undefined) {
 		lenis = new Lenis({
 			lerp: 0.1,
-			wheelMultiplier: 1,
-			gestureOrientation: "vertical",
-			normalizeWheel: false,
-			smoothTouch: false,
-			ease: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+			touchMultiplier: 1.5,
+			easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
 		});
 
 		lenis.on("scroll", ScrollTrigger.update);
@@ -268,6 +262,7 @@ const closedFundsListAnimation = function () {
 
 	const playTimelines = function () {
 		if (tlArr.length > 0 && !tlPlaying) {
+			document.dispatchEvent(eventDisableScroll);
 			let nextTimeline = tlArr.shift(); // Get the next timeline
 			tlPlaying = true;
 			nextTimeline.restart();
@@ -317,17 +312,15 @@ const closedFundsListAnimation = function () {
 					trigger: ".funds-list_sticky-container",
 					start: `top+=${index * animationInterval} top`,
 					end: `top+=${(index + 1) * animationInterval} top`,
-					markers: true,
+					markers: false,
 					onEnter: () => {
 						if (index !== 0) {
-							document.dispatchEvent(eventDisableScroll);
 							tlArr.push(tlDown);
 							playTimelines();
 						}
 					},
 					onLeaveBack: () => {
 						if (index !== 0) {
-							document.dispatchEvent(eventDisableScroll);
 							tlArr.push(tlUp);
 							playTimelines();
 						}
@@ -685,7 +678,7 @@ const footerRevealAnimation = function () {
 	setupFooterTrigger();
 
 	// Reposition footer when layout changes
-	// window.addEventListener("resize", setupFooterTrigger);
+	window.addEventListener("resize", setupFooterTrigger);
 	const layoutShiftButtons = document.querySelectorAll(".news-list_filter-text, .news-list_nav-btn, .form_submit-button, .faq_item");
 	if (layoutShiftButtons.length !== 0) {
 		layoutShiftButtons.forEach((button) => {
