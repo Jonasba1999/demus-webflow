@@ -677,8 +677,6 @@ const footerRevealAnimation = function () {
 
 	setupFooterTrigger();
 
-	// Reposition footer when layout changes
-	window.addEventListener("resize", setupFooterTrigger);
 	const layoutShiftButtons = document.querySelectorAll(".news-list_filter-text, .news-list_nav-btn, .form_submit-button, .faq_item");
 	if (layoutShiftButtons.length !== 0) {
 		layoutShiftButtons.forEach((button) => {
