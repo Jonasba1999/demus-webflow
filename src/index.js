@@ -536,7 +536,7 @@ const contactFormSelect = function () {
 const customFormValidation = function () {
 	const $form = $("form");
 	$.validator.addMethod("letters", function (value, element) {
-		return this.optional(element) || value == value.match(/^[a-zA-Z\s]*$/);
+		return this.optional(element) || /^[\p{L}\s]*$/u.test(value);
 	});
 	$.validator.addMethod("phone", function (value, element) {
 		return this.optional(element) || /^[\d\s().+-]+$/.test(value);
