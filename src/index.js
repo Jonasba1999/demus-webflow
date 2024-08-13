@@ -253,192 +253,25 @@ const rotatingTextAnimation = function () {
 };
 
 const closedFundsListAnimation = function () {
-	const funds = document.querySelectorAll(".funds-list_item");
-	const track = document.querySelector(".funds-list_track");
+	// Opacity needs to be changed to 75%
 
-	if (!track) return;
+	const fundCards = document.querySelectorAll(".funds-list_item");
+	if (fundCards.length === 0) return;
 
-	// Animation options
-	const prevEase = "power2.in";
-	const currEase = "power2.out";
-	const animationInterval = 32;
-	const animationDuration = 1;
-
-	// Setting height of the animation track, accordingly to how many funds there are
-	if (window.innerWidth > 767) {
-		track.style.height = `calc(100vh + ${animationInterval * funds.length}px)`;
-	}
-
-	// Setting value to fund counter dynamically
-	const totalFunds = document.querySelectorAll(".funds-list_total");
-	totalFunds.forEach((fund) => {
-		fund.textContent = funds.length < 10 ? "0" + funds.length : funds.length;
-	});
-
-	let tlArr = [];
-	let tlPlaying = false;
-
-	const playTimelines = function () {
-		if (tlArr.length > 0 && !tlPlaying) {
-			document.dispatchEvent(eventDisableScroll);
-			let nextTimeline = tlArr.shift(); // Get the next timeline
-			tlPlaying = true;
-			nextTimeline.restart();
-
-			// Use onComplete to trigger the next timeline
-			nextTimeline.eventCallback("onComplete", () => {
-				document.dispatchEvent(eventEnableScroll);
-				tlPlaying = false;
-				playTimelines(); // Play the next timeline when the current one finishes
-			});
-		}
-	};
-
-	// Variable to track heighest heading grid value
-	let maxGridHeight = 0;
-
-	funds.forEach((fund, index) => {
-		const currentTitle = fund.querySelector(".funds-list_heading");
-		const currentTitleSplit = new SplitType(currentTitle, { types: "lines, words" });
-		const currentInfo = fund.querySelectorAll(".funds-list_info-grid .funds-list_info-text");
-		const currentImage = fund.querySelector(".funds-list_image");
-		const currentNumber = fund.querySelector(".funds-list_current");
-		const currentButton = fund.querySelector(".button");
-		const fundHeadingGrid = fund.querySelector(".funds-list_heading-grid");
-
-		// Get fund item heighest grid
-		const currentFundGridHeight = fundHeadingGrid.offsetHeight;
-		currentFundGridHeight > maxGridHeight ? (maxGridHeight = currentFundGridHeight) : null;
-
-		// Current fund number
-		currentNumber.textContent = index < 10 ? "0" + (index + 1) : index;
-
-		// Disable animation on mobile
-		if (window.innerWidth > 767) {
-			// Changing z-index to reverse the list order, so first html element is visible on top
-			let zIndex = index * -1;
-			fund.style.zIndex = zIndex;
-			if (index !== 0) {
-				gsap.set([currentTitleSplit.words, currentInfo, currentNumber, currentButton, currentImage], { y: "100%" });
-			}
-
-			const tlDown = gsap.timeline({ paused: true });
-			const tlUp = gsap.timeline({ paused: true });
-
-			const masterTimeline = gsap.timeline({
-				scrollTrigger: {
-					trigger: ".funds-list_sticky-container",
-					start: `top+=${index * animationInterval} top`,
-					end: `top+=${(index + 1) * animationInterval} top`,
-					markers: false,
-					onEnter: () => {
-						if (index !== 0) {
-							tlArr.push(tlDown);
-							playTimelines();
-						}
-					},
-					onLeaveBack: () => {
-						if (index !== 0) {
-							tlArr.push(tlUp);
-							playTimelines();
-						}
-					},
-				},
-			});
-
-			// Animate OUT PREVIOUS
-			if (index !== 0) {
-				const prevInfo = funds[index - 1].querySelectorAll(".funds-list_info-grid .funds-list_info-text");
-				const prevTitle = funds[index - 1].querySelector(".funds-list_heading");
-				const prevTitleWords = prevTitle.querySelectorAll(".word");
-				const prevImage = funds[index - 1].querySelector(".funds-list_image");
-				const prevNumber = funds[index - 1].querySelector(".funds-list_current");
-				const prevButton = funds[index - 1].querySelector(".button");
-
-				// Scroll down animation
-				tlDown
-					.to(prevImage, {
-						y: "-100%",
-						ease: "power2.inOut",
-						duration: 1,
-					})
-					.to(
-						currentImage,
-						{
-							y: "0%",
-							ease: "power2.inOut",
-							duration: 1,
-						},
-						"<"
-					)
-					.to(
-						[prevTitleWords, prevInfo, prevNumber, prevButton],
-						{
-							y: "-100%",
-							ease: "power2.inOut",
-							duration: 0.6,
-						},
-						"<"
-					)
-					.to(
-						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
-						{
-							y: "0%",
-							ease: "power2.inOut",
-							duration: 0.6,
-						},
-						0.4
-					);
-
-				tlDown.set(fund, { zIndex: zIndex * -1 });
-
-				// (SCROLLING UP) Animate out current
-				tlUp
-					.to(currentImage, {
-						y: "100%",
-						ease: "power2.inOut",
-						duration: 1,
-					})
-					.to(
-						prevImage,
-						{
-							y: "0%",
-							ease: "power2.inOut",
-							duration: 1,
-						},
-						"<"
-					)
-					.to(
-						[currentTitleSplit.words, currentInfo, currentNumber, currentButton],
-						{
-							y: "100%",
-							ease: "power2.inOut",
-							duration: 0.6,
-						},
-						"<"
-					)
-					.to(
-						[prevTitleWords, prevInfo, prevNumber, prevButton],
-						{
-							y: "0%",
-							ease: "power2.inOut",
-							duration: 0.6,
-						},
-						0.4
-					);
-
-				tlUp.set(fund, { zIndex: zIndex });
-			}
-		}
-	});
-
-	// Setting grid height to the heighest one
-	if (window.innerWidth > 767) {
-		const fundHeadingGrids = document.querySelectorAll(".funds-list_heading-grid");
-		fundHeadingGrids.forEach((grid) => {
-			grid.style.height = `${maxGridHeight}px`;
+	fundCards.forEach((card, index) => {
+		if (index === 0) return;
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: card,
+				scrub: 1,
+				start: "top bottom",
+				end: "top 30%",
+			},
 		});
-	}
+		tl.to(fundCards[index - 1], {
+			opacity: 0.75,
+		});
+	});
 };
 
 const closedFundsGalleryAnimation = function () {
