@@ -117,24 +117,42 @@ const menuAnimation = function () {
 		0.1
 	);
 
+	// Open/Close menu on click
+	const hamburgers = document.querySelectorAll(".animated-hamburger");
+	let disableHover = false;
+
+	const menuHandler = function () {
+		// 1. Handle hamburgers state
+		if (hamburgers.length !== 0) {
+			hamburgers.forEach((hamburger) => hamburger.classList.toggle("hamburger-open"));
+		}
+
+		// 2. Menu state and scroll adjustment
+		navMenu.classList.toggle("menu-open");
+		if (navMenu.classList.contains("menu-open")) {
+			document.dispatchEvent(eventDisableScroll);
+			menuTl.play();
+			navLinksTl.restart();
+		} else {
+			document.dispatchEvent(eventEnableScroll);
+			menuTl.reverse();
+		}
+	};
+
 	menuTrigger.forEach((btn) => {
 		btn.addEventListener("click", (e) => {
-			// Animate hamburger on Desktop
-			const animatedButton = document.querySelectorAll(".animated-hamburger");
-			if (animatedButton.length !== 0) {
-				animatedButton.forEach((btn) => btn.classList.toggle("hamburger-open"));
-			}
-
-			navMenu.classList.toggle("menu-open");
-			if (navMenu.classList.contains("menu-open")) {
-				document.dispatchEvent(eventDisableScroll);
-				menuTl.play();
-				navLinksTl.restart();
-			} else {
-				document.dispatchEvent(eventEnableScroll);
-				menuTl.reverse();
-			}
+			menuHandler();
 		});
+	});
+
+	// Event listener for index zone
+	const menuOpenZone = document.querySelector("#menu-open-zone");
+	if (!menuOpenZone) return;
+
+	menuOpenZone.addEventListener("mouseover", () => {
+		if (disableHover) return;
+		disableHover = true;
+		menuHandler();
 	});
 };
 
