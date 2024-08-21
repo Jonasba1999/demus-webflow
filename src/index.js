@@ -148,8 +148,14 @@ const menuAnimation = function () {
 	// Event listener for index zone
 	const menuOpenZone = document.querySelector("#menu-open-zone");
 	if (!menuOpenZone) return;
+	const menuCloseZone = document.querySelector("#menu-close-zone");
 
 	menuOpenZone.addEventListener("mouseover", () => {
+		if (disableHover) return;
+		menuHandler();
+	});
+
+	menuCloseZone.addEventListener("mouseout", () => {
 		if (disableHover) return;
 		disableHover = true;
 		menuHandler();
