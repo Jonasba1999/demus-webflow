@@ -153,7 +153,7 @@ const menuAnimation = function () {
 		menuHandler();
 	});
 
-	menuCloseZone.addEventListener("mouseout", () => {
+	menuCloseZone.addEventListener("mouseleave", () => {
 		menuHandler();
 	});
 };
