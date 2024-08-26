@@ -55,6 +55,7 @@ const menuAnimation = function () {
 	const navWrap = document.querySelector(".nav_wrap, .transparent-nav_wrap");
 	const homeHeaderLogo = document.querySelector(".header_logo.is-home");
 	const navLinks = document.querySelectorAll(".nav_link");
+	let menuOpen = false;
 
 	gsap.set(navMenu, {
 		visibility: "hidden",
@@ -150,10 +151,13 @@ const menuAnimation = function () {
 	const menuCloseZone = document.querySelector("#menu-close-zone");
 
 	menuOpenZone.addEventListener("mouseover", () => {
+		console.log("Hovered on menu-open-zone");
+
 		menuHandler();
 	});
 
 	menuCloseZone.addEventListener("mouseleave", () => {
+		if (menuTl.isActive()) return;
 		menuHandler();
 	});
 };
