@@ -119,7 +119,6 @@ const menuAnimation = function () {
 
 	// Open/Close menu on click
 	const hamburgers = document.querySelectorAll(".animated-hamburger");
-	let disableHover = false;
 
 	const menuHandler = function () {
 		// 1. Handle hamburgers state
@@ -151,13 +150,10 @@ const menuAnimation = function () {
 	const menuCloseZone = document.querySelector("#menu-close-zone");
 
 	menuOpenZone.addEventListener("mouseover", () => {
-		if (disableHover) return;
 		menuHandler();
 	});
 
 	menuCloseZone.addEventListener("mouseout", () => {
-		if (disableHover) return;
-		disableHover = true;
 		menuHandler();
 	});
 };
