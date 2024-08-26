@@ -269,13 +269,14 @@ const closedFundsListAnimation = function () {
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: card,
+				ease: "linear",
 				scrub: 1,
 				start: "top bottom",
 				end: "top top",
 			},
 		});
 		tl.to(fundCards[index - 1], {
-			opacity: 0.75,
+			opacity: 0.5,
 		});
 	});
 };
