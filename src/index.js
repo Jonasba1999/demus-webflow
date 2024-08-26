@@ -271,7 +271,7 @@ const closedFundsListAnimation = function () {
 				trigger: card,
 				scrub: 1,
 				start: "top bottom",
-				end: "top 30%",
+				end: "top top",
 			},
 		});
 		tl.to(fundCards[index - 1], {
