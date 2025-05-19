@@ -49,7 +49,7 @@ const smoothScroll = function () {
 };
 
 const menuAnimation = function () {
-	const menuTrigger = document.querySelectorAll(".header_hamburger, .nav_hamburger, .header_hamburger-text");
+	const menuTrigger = document.querySelectorAll(".header_hamburger, .nav_hamburger, .header-menu-btn");
 	const navMenu = document.querySelector(".nav");
 	if (!menuTrigger || !navMenu) return;
 	const navWrap = document.querySelector(".nav_wrap, .transparent-nav_wrap");
@@ -143,22 +143,6 @@ const menuAnimation = function () {
 		btn.addEventListener("click", (e) => {
 			menuHandler();
 		});
-	});
-
-	// Event listener for index zone
-	const menuOpenZone = document.querySelector("#menu-open-zone");
-	if (!menuOpenZone) return;
-	const menuCloseZone = document.querySelector("#menu-close-zone");
-
-	menuOpenZone.addEventListener("mouseover", () => {
-		console.log("Hovered on menu-open-zone");
-
-		menuHandler();
-	});
-
-	menuCloseZone.addEventListener("mouseleave", () => {
-		if (menuTl.isActive()) return;
-		menuHandler();
 	});
 };
 
@@ -1201,6 +1185,19 @@ const faqNavLinks = function () {
 	});
 };
 
+function closedFundsCounter() {
+	const closedFunds = document.querySelectorAll(".funds-list_item-wrap");
+	if (!closedFunds.length) return;
+
+	closedFunds.forEach((fund, index) => {
+		const currentEL = fund.querySelector('[data-fund-counter="current"]');
+		const totalEL = fund.querySelector('[data-fund-counter="total"]');
+
+		currentEL.textContent = (index + 1).toString().padStart(2, "0");
+		totalEL.textContent = closedFunds.length.toString().padStart(2, "0");
+	});
+}
+
 const initFunctions = function () {
 	gsap.registerPlugin(ScrollTrigger);
 	smoothScroll();
@@ -1228,6 +1225,7 @@ const initFunctions = function () {
 	footerRevealAnimation();
 	faqSwiper();
 	faqNavLinks();
+	closedFundsCounter();
 };
 
 document.addEventListener("DOMContentLoaded", initFunctions);
