@@ -144,6 +144,12 @@ const menuAnimation = function () {
 			menuHandler();
 		});
 	});
+
+	document.addEventListener("click", (e) => {
+		if (navMenu.classList.contains("menu-open") && !navMenu.contains(e.target) && !Array.from(menuTrigger).some((trigger) => trigger.contains(e.target))) {
+			menuHandler();
+		}
+	});
 };
 
 const rotatingTextAnimation = function () {
@@ -1198,6 +1204,14 @@ function closedFundsCounter() {
 	});
 }
 
+function setFooterYear() {
+	const yearEl = document.getElementById("current-year");
+
+	if (!yearEl) return;
+
+	yearEl.textContent = new Date().getFullYear();
+}
+
 const initFunctions = function () {
 	gsap.registerPlugin(ScrollTrigger);
 	smoothScroll();
@@ -1226,6 +1240,7 @@ const initFunctions = function () {
 	faqSwiper();
 	faqNavLinks();
 	closedFundsCounter();
+	setFooterYear();
 };
 
 document.addEventListener("DOMContentLoaded", initFunctions);
